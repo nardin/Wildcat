@@ -47,7 +47,31 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Client\Wildcat.Core.coffee">
+    <None Include="Client\Photo\Block\Home.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
+    <None Include="Client\Wildcat.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
+    <None Include="Client\Wildcat\Block.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
+    <None Include="Client\Wildcat\Core.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
+    <None Include="Client\Wildcat\Layout.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
@@ -55,9 +79,27 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\Wildcat.Core.js">
-      <DependentUpon>Wildcat.Core.coffee</DependentUpon>
+    <Content Include="Client\jquery-1.7.2.js" />
+    <Content Include="Client\Photo\Block\Home.js">
+      <DependentUpon>Home.coffee</DependentUpon>
     </Content>
+    <Content Include="Client\require.js" />
+    <Content Include="Client\Wildcat.js">
+      <DependentUpon>Wildcat.coffee</DependentUpon>
+    </Content>
+    <Content Include="Client\Wildcat\Block.js">
+      <DependentUpon>Block.coffee</DependentUpon>
+    </Content>
+    <Content Include="Client\Wildcat\Core.js">
+      <DependentUpon>Core.coffee</DependentUpon>
+    </Content>
+    <Content Include="Client\Wildcat\Layout.js">
+      <DependentUpon>Layout.coffee</DependentUpon>
+    </Content>
+    <Content Include="index.htm" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Client\Photo\Model\Collection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

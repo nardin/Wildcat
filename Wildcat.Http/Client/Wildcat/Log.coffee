@@ -1,0 +1,2 @@
+class Wildcat.Log
+    

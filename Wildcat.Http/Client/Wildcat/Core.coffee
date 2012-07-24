@@ -4,6 +4,8 @@ namespace "Wildcat"
 class Wildcat.Core
     #Макет управления блоками
     layout = "test"
+    net = "net"
+    log = "log"
 
     #Загрузка модулей
     @load: (classname) ->
@@ -22,6 +24,9 @@ class Wildcat.Core
             obj.onLoad()
 
     init: () ->
+        @net = new Wildcat.Net()
         Wildcat.Core.load "Wildcat.Block"
         Wildcat.Core.load "Photo.Block.Home"
+        Wildcat.Core.load "Photo.Block.Events"
+        Wildcat.Core.load "Photo.Block.Event"
         Wildcat.Core.load "Wildcat.Layout"

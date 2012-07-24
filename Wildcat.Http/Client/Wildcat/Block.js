@@ -7,30 +7,33 @@
 
     Block.name = 'Block';
 
-    function Block() {}
+    function Block(id, container) {
+      this.id = id;
+      this.container = container;
+    }
 
     Block.prototype.init = function() {
-      this._init();
-      return console.log("blokc init");
+      return this._init();
     };
 
     Block.prototype._init = function() {
-      var key, value, _ref, _results;
+      var key, key_id, value, _ref, _results;
       _ref = this._in;
       _results = [];
       for (key in _ref) {
         if (!__hasProp.call(_ref, key)) continue;
         value = _ref[key];
         console.log(key);
-        this._in[key] = new this._in[key]();
+        key_id = this.id + '_' + key;
+        this.container.append('<div id="' + key_id + '"></div>');
+        this._in[key] = new this._in[key](key_id, this.container.find("#" + key_id));
         _results.push(this._in[key].init());
       }
       return _results;
     };
 
     Block.prototype.load = function() {
-      this._load();
-      return console.log("blokc load");
+      return this._load();
     };
 
     Block.prototype._load = function() {
@@ -46,7 +49,7 @@
     };
 
     Block.prototype.render = function() {
-      console.log("block render");
+      this.container.text("А я блок! А кто ты?");
       return this._render();
     };
 

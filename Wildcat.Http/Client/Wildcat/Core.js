@@ -3,13 +3,17 @@
   namespace("Wildcat");
 
   Wildcat.Core = (function() {
-    var layout;
+    var layout, log, net;
 
     Core.name = 'Core';
 
     function Core() {}
 
     layout = "test";
+
+    net = "net";
+
+    log = "log";
 
     Core.load = function(classname) {
       var classnamed, self;
@@ -34,8 +38,11 @@
     };
 
     Core.prototype.init = function() {
+      this.net = new Wildcat.Net();
       Wildcat.Core.load("Wildcat.Block");
       Wildcat.Core.load("Photo.Block.Home");
+      Wildcat.Core.load("Photo.Block.Events");
+      Wildcat.Core.load("Photo.Block.Event");
       return Wildcat.Core.load("Wildcat.Layout");
     };
 

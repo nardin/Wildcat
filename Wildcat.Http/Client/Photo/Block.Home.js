@@ -12,12 +12,13 @@
 
     Home.name = 'Home';
 
-    function Home() {}
+    function Home() {
+      return Home.__super__.constructor.apply(this, arguments);
+    }
 
     Home.prototype.init = function() {
       this._in = {
-        title: Wildcat.Block,
-        test: Wildcat.Block
+        events: Photo.Block.Events
       };
       this._init();
       return console.log("Home init");

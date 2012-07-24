@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Wildcat.DB
+namespace Wildcat.Http.Core
 {
-    class Program
+    class Sys
     {
-        static void Main(string[] args)
-        {
-        }
+
     }
 }

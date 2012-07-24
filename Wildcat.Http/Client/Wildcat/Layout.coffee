@@ -15,11 +15,12 @@ class Wildcat.Layout
         window.core.layout = @
         @container = $("body")
         @container.html('<div id="layout"></div>')
+        @container = @container.find("#layout")
         @route()
 
     # Маршрутизация
     route:->
-        @mainBlock = new Photo.Block.Home()
+        @mainBlock = new Photo.Block.Home('main',@container)
         @mainBlock.init()
         @mainBlock.load()
         @mainBlock.render()

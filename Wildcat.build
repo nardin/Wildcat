@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<project name="Wildcat" default="build">
+    <property name="basename" value="HelloWorld"/>
+    <property name="debug" value="true"/>
+    <property name="configuration" value="release"/>
+
+    <target name="clean">
+        <delete>
+            <fileset>
+                <include name="build"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="build">
+      <mkdir dir="build/bin" />
+      <mkdir dir="build/bin/Release" />
+      <mkdir dir="build/bin/Client" />
+      <call target="build.server"/>
+      <call target="build.web"/>
+    </target>
+
+  <target name="build.server">
+    <solution configuration="${configuration}" solutionfile="Wildcat.sln">
+    </solution>
+    <property name="dir.build.bin.Release" value="build/bin/Release" />
+    <copy todir="${dir.build.bin.Release}" includeemptydirs="true" overwrite="true" verbose="true">
+      <fileset basedir=".\Wildcat.Http\bin\Release">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>
+    <copy todir="${dir.build.bin.Release}" includeemptydirs="true" overwrite="true" verbose="true">
+      <fileset basedir=".\Wildcat.DB\bin\Release">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="build.web">
+    <property name="dir.build.Client" value="build/Client" />
+    <copy todir="${dir.build.Client}" includeemptydirs="true" overwrite="true" verbose="true">
+      <fileset basedir=".\Wildcat.Http\Client">
+        <include name="**/*.*" />
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- Full path of the current project -->
+  <property name="projectPath" value="/Users/davidezanotti/Documents/workspace/GoogleClosure" />
+
+  <!-- Full path to Closure library -->
+  <property name="closurePath" value="${projectPath}/closure" />
+
+  <!-- Full path to the compiler jar -->
+  <property name="compilerPath" value="/Users/davidezanotti/Documents/closure-compiler/compiler.jar" />
+
+  <!-- Full path to the compiled file (created if not defined) -->
+  <property name="outputPath" value="${projectPath}/ant-generation.js" />
+
+  <!-- Full path to the file which will contains debug output and errors -->
+  <property name="logPath" value="${projectPath}/closure-compiler.log" />
+
+  <!-- Compilation level -->
+  <property name="compilation" value="WHITESPACE_ONLY" />
+
+  <target name="JavaScript Compilation">
+
+    <exec error="${logPath}" output="${outputPath}" executable="${closurePath}/bin/calcdeps.py">
+      <arg line="-i ${filesToCompile} -p ${closurePath} -o compiled -c ${compilerPath} -f '--compilation_level=${compilation}'" />
+    </exec>
+
+  </target>
+  
+  
+
+
+</project>

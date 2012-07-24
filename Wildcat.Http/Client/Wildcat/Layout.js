@@ -20,11 +20,12 @@
       window.core.layout = this;
       this.container = $("body");
       this.container.html('<div id="layout"></div>');
+      this.container = this.container.find("#layout");
       return this.route();
     };
 
     Layout.prototype.route = function() {
-      this.mainBlock = new Photo.Block.Home();
+      this.mainBlock = new Photo.Block.Home('main', this.container);
       this.mainBlock.init();
       this.mainBlock.load();
       return this.mainBlock.render();

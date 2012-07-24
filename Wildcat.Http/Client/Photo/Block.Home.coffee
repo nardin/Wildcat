@@ -3,12 +3,10 @@ namespace "Photo.Block"
 
 class Photo.Block.Home extends Wildcat.Block
     
-    constructor: ->
         
     init: ->
         @_in = 
-            title: Wildcat.Block
-            test: Wildcat.Block
+            events: Photo.Block.Events
         @_init()    
         console.log("Home init")
 

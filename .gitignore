@@ -5,3 +5,6 @@ obj
 # mstest test results
 TestResults
 /_ReSharper.Wildcat
+/build
+/tools/nant/doc
+/tools/nant/examples

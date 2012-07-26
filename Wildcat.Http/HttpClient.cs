@@ -1,22 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Configuration;
-using com.google.inject;
 using com.google.javascript.jscomp;
-using com.google.template.soy;
-using com.google.template.soy.jssrc;
-using com.google.template.soy.msgs.restricted;
-using com.google.template.soy.xliffmsgplugin;
-using ikvm.@internal;
 
 namespace Wildcat.Http
 {
     class HttpClient
     {
+        protected void ScanDir(DirectoryInfo dir, string selector, ref List<string> fileList)
+        {
+            foreach (var file in dir.GetFiles(selector))
+            {
+                fileList.Add(file.FullName);
+            }
+            foreach (var subDir in dir.GetDirectories())
+            {
+                ScanDir(subDir,selector,ref fileList);    
+            }
+        }
+
+
         // Отправка страницы с ошибкой
         private void SendError(TcpClient Client, int Code)
         {
@@ -110,12 +118,16 @@ namespace Wildcat.Http
                 Client.GetStream().Write(HeadersBuffer, 0, HeadersBuffer.Length);
 
                 string totaljs = "";
+                List<string> fileList = new List<string>();
+                ScanDir(dir, "*.js",ref fileList);
 
-                foreach (var file in dir.GetFiles("*.js"))
+
+
+                foreach (var file in fileList)
                 {
                     if (ConfigurationManager.AppSettings["enable closure compiler"] == "false")
                     {
-                        FileStream FS = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        FileStream FS = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
                         while (FS.Position < FS.Length)
                         {
                             // Читаем данные из файла
@@ -132,7 +144,7 @@ namespace Wildcat.Http
 
                         
                         var dummy = JSSourceFile.fromCode(dir.Name + ".wcjs", "");
-                        var source = JSSourceFile.fromFile(file.FullName);
+                        var source = JSSourceFile.fromFile(file);
                         var result = compiler.compile(dummy, source, options);
                         String str = compiler.toSource();
                         totaljs += str;
@@ -144,7 +156,7 @@ namespace Wildcat.Http
             {
                 if (RequestUri.EndsWith("/"))
                 {
-                    RequestUri += "index.html";
+                    RequestUri = "index.html";
                 }
 
                 string FilePath = basePath + RequestUri;

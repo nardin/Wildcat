@@ -39,11 +39,8 @@
 
     Core.prototype.init = function() {
       this.net = new Wildcat.Net();
-      Wildcat.Core.load("Wildcat.Block");
-      Wildcat.Core.load("Photo.Block.Home");
-      Wildcat.Core.load("Photo.Block.Events");
-      Wildcat.Core.load("Photo.Block.Event");
-      return Wildcat.Core.load("Wildcat.Layout");
+      this.layout = new Wildcat.Layout();
+      return this.layout.init();
     };
 
     return Core;

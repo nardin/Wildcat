@@ -23,10 +23,11 @@ class Wildcat.Core
             console.log("er");
             obj.onLoad()
 
+
     init: () ->
         @net = new Wildcat.Net()
-        Wildcat.Core.load "Wildcat.Block"
-        Wildcat.Core.load "Photo.Block.Home"
-        Wildcat.Core.load "Photo.Block.Events"
-        Wildcat.Core.load "Photo.Block.Event"
-        Wildcat.Core.load "Wildcat.Layout"
+        @layout = new Wildcat.Layout();
+        @layout.init();
+
+
+        

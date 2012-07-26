@@ -52,8 +52,8 @@
     <Reference Include="IKVM.Runtime">
       <HintPath>..\lib\IKVM.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="SoyToJsSrcCompiler">
-      <HintPath>..\lib\SoyToJsSrcCompiler.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.7\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Client.cs" />
+    <Compile Include="Core\Layout.cs" />
     <Compile Include="Core\Sys.cs" />
     <Compile Include="HttpClient.cs" />
     <Compile Include="Program.cs" />
@@ -72,6 +73,12 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Client\Music\Block\Artist.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
     </None>
     <None Include="Client\Photo\Block.Event.coffee" />
     <None Include="Client\Photo\Block.Events.coffee" />
@@ -123,6 +130,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Client\jquery-1.7.2.js" />
+    <Content Include="Client\Music\Block\Artist.js">
+      <DependentUpon>Artist.coffee</DependentUpon>
+    </Content>
     <Content Include="Client\Photo\Block.Event.js">
       <DependentUpon>Block.Event.coffee</DependentUpon>
     </Content>
@@ -154,7 +164,7 @@
     <Content Include="Client\Wildcat\Net.js">
       <DependentUpon>Net.coffee</DependentUpon>
     </Content>
-    <Content Include="index.htm" />
+    <Content Include="index.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Client\Photo\Model\Collection\" />
@@ -163,6 +173,10 @@
     <ProjectReference Include="..\Wildcat.DB\Wildcat.DB.csproj">
       <Project>{EF7A08D4-8640-4D69-AE78-C7D048D45706}</Project>
       <Name>Wildcat.DB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Wildcat.Music\Music.csproj">
+      <Project>{6C7ADA68-0903-4079-BADE-A6C418887DCC}</Project>
+      <Name>Music</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

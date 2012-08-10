@@ -12,20 +12,26 @@ namespace Wildcat.Http
 
         static public void Start()
         {
+            var url = "ws://" + ConfigurationManager.AppSettings["ip"] + ":" +
+                      ConfigurationManager.AppSettings["wsport"];
 
-            var server = new WebSocketServer("ws://" + ConfigurationManager.AppSettings["ip"] + ":" + ConfigurationManager.AppSettings["wsport"]);
+            SysConsole.WSServerUrl = url;
+
+            var server = new WebSocketServer(url);
             server.Start(socket =>
             {
                 string id = Guid.NewGuid().ToString();
                 Client client = new Client(id,socket);
                 clients.Add(id,client);
-                Console.WriteLine("Всего подключенных клиентов :" + clients.Count);
+                SysConsole.ClientCount = clients.Count;
+                SysConsole.Display();
             });
         }
         static public void Close(string id)
         {
             clients.Remove(id);
-            Console.WriteLine("Всего подключенных клиентов :" + clients.Count);
+            SysConsole.ClientCount = clients.Count;
+            //SysConsole.Display();
         }
     }
 }

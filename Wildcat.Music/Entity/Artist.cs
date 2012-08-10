@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MongoDB.Driver;
+using Newtonsoft.Json;
 
 namespace Music.Entity
 {
-    class Artist : Wildcat.DB.System.Entity
+    public class Artist : Wildcat.DB.System.Entity
     {
         [ScaffoldColumn(false)]
         public string url;
@@ -20,11 +21,20 @@ namespace Music.Entity
         public string bigPoster;
 
         [ScaffoldColumn(false)]
-        protected IList<MongoDBRef> _sings;
+        [JsonIgnore]
+        public IList<MongoDBRef> sings;
 
         [ScaffoldColumn(false)]
-        protected IList<MongoDBRef> _albums;
+        [JsonIgnore]
+        public IList<MongoDBRef> albums;
 
+
+        public Collection.Album GetAlbums()
+        {
+            var col = new Collection.Album();
+            var rep = new Repository.AlbumRepository();
+            return rep.GetByArtistName(name);
+        }
             
     }
 }

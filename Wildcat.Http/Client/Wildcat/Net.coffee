@@ -1,12 +1,12 @@
 # ”правление передачей данных
 class Wildcat.Net
-    isConnected = false
     messageList = []
 
     constructor:() ->
-        @s = @
+        @self = @
         console.info("Net : init" )
         window.core.net = @
+        console.time("Layout.OnLoad");
         @wsImpl = window.WebSocket || window.MozWebSocket;
         @ws = new @wsImpl('ws://46.61.183.13:8181/Wildcat', 'my-protocol');
         @ws.onopen = @onOpen
@@ -14,21 +14,27 @@ class Wildcat.Net
         @ws.onclose = @onClose
 
     onOpen: (evt) ->
+        console.timeEnd("Layout.OnLoad");
+        core.net.isConnected = true
         console.log("Connection open ...");
-        if messageList.length > 0
-            @.send(messageList[0])
+        if typeof(core.net.messageList) != 'undefined'  and core.net.messageList.length > 0
+            core.net.ws.send(core.net.messageList[0])
 
     onClose: (evt) ->
         console.log "Connection close ...";
 
     onMessage: (evt) ->
-        console.log "Received Message: " + evt.data
+        core.onEvent evt.data
 
     Send : (obj, ev, data) ->
         if @isConnected
             @ws.send(JSON.stringify({object:obj,event:ev,data:data}))
+            console.log("push");
         else
-            messageList.push(JSON.stringify({object:obj,event:ev,data:data}))
+            if typeof core.net.messageList == 'undefined'
+                core.net.messageList = []
+            core.net.messageList.push(JSON.stringify({object:obj,event:ev,data:data}))
+            console.log("send");
             
 
 

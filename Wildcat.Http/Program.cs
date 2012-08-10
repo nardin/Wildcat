@@ -11,10 +11,14 @@ namespace Wildcat.Http
     {
         static void Main(string[] args)
         {
+            Logger.InitLogger();
+
             // Веб сервер для отдачи статики
             Thread t = new Thread(HttpServer.Start);
             t.Start();
             Sys.LoadModule();
+
+            // Веб сервис
             WSServer.Start();
             
             while (true)

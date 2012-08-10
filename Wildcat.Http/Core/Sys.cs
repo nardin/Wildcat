@@ -13,12 +13,8 @@ namespace Wildcat.Http.Core
         {
             blockType = new Dictionary<string, Type>();
 
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("==Load Modules==");
-
-
             Assembly assembly = Assembly.LoadFrom("Music.dll");
-            Console.WriteLine(assembly.FullName);
+            SysConsole.Modules.Add(assembly.FullName);
             Type[] types = assembly.GetTypes();
             char[] delimiter = ".".ToCharArray();
 
@@ -30,12 +26,10 @@ namespace Wildcat.Http.Core
                     case "Block":
                         string blockName = type.FullName;
                         blockType[blockName] =  type;
-                        Console.WriteLine("Load Block: " + blockName);
+                        SysConsole.Blocks.Add(blockName);
                         break;
                 }
             }
-            Console.WriteLine("Total block: "+blockType.Count);
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
     }

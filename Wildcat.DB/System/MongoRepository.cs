@@ -25,7 +25,7 @@ namespace Wildcat.DB.System
         }
 
         private MongoCollection<T> _collection;
-        protected MongoCollection<T> collection
+        protected MongoCollection<T> Collection
         {
             get
             {
@@ -39,7 +39,7 @@ namespace Wildcat.DB.System
 
         public T GetById(string id)
         {
-            return _collection.FindOneByIdAs<T>(new BsonObjectId(id));
+            return Collection.FindOneByIdAs<T>(new BsonObjectId(id));
         }
     }
 }

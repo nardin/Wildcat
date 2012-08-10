@@ -2,12 +2,12 @@ namespace "Music"
 namespace "Music.Block"
 
 class Music.Block.Artist extends Wildcat.Block
-    init: ->
-        @_in = {}
-        @_init()    
-        #console.log("Home init")
+    OnLoadData: (data) ->
+        @model = new Music.Model.Artist();
+        @model.OnLoad(data);
+        @render()
 
     render: ->
-        @container.text("Это артист")
+        @view = new Music.View.Artist(@container, @model,@)
         @_render()
-        console.log("Home block artist")
+        

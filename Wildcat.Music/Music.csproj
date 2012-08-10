@@ -50,9 +50,15 @@
   <ItemGroup>
     <Compile Include="Block\Albums.cs" />
     <Compile Include="Block\Artist.cs" />
+    <Compile Include="Block\Artists.cs" />
+    <Compile Include="Block\Player.cs" />
+    <Compile Include="Collection\Album.cs" />
     <Compile Include="Collection\Artist.cs" />
+    <Compile Include="Entity\Album.cs" />
     <Compile Include="Entity\Artist.cs" />
+    <Compile Include="Entity\Sing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\AlbumRepository.cs" />
     <Compile Include="Repository\ArtistRepository.cs" />
   </ItemGroup>
   <ItemGroup>

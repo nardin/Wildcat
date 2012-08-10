@@ -153,7 +153,7 @@ namespace Wildcat.Http
 
             }
             else
-            {
+            {              
                 if (RequestUri.EndsWith("/"))
                 {
                     RequestUri = "index.html";
@@ -238,7 +238,7 @@ namespace Wildcat.Http
 
 
             Client.Close();
-            Console.WriteLine(RequestUri);
+            Core.Logger.Log.Info(RequestUri);
         }
     }
 }

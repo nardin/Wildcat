@@ -5,59 +5,146 @@ using Newtonsoft.Json.Linq;
 
 namespace Wildcat.DB.System
 {
-    public class Block
+    /// <summary>
+    /// Базовый класс блоков
+    /// </summary>
+    public abstract class Block
     {
-        protected Block Parent;
+        protected object Model;
 
-        protected List<Block> Blocks = new List<Block>();
+        public BlockState State;
 
+        public Dictionary<string,string> Params = new Dictionary<string, string>();
 
-        public void OnLoad(JProperty data)
+        public string Name;
+
+        public Block Parent;
+
+        protected Dictionary<string, Block> Blocks = new Dictionary<string, Block>();
+
+        protected void AddChildBlock(string name, ref Block block)
         {
-            Type type = this.GetType();
+            block.Parent = this;
+            block.Name = name;
+            Blocks.Add(name, block);
+        }
+
+
+        public void OnLoad(JObject data)
+        {
+            Type type = GetType();
             Console.WriteLine(type.FullName + ": OnLoad");
-            foreach (var childBlock in Blocks)
+            foreach (var childBlock in Blocks.Values)
             {
                 childBlock.OnLoad(data);
             }
         }
 
-        public virtual void OnInit(Block block)
+        public virtual void OnInitSmall(Block block)
         {
             Parent = block;
-            foreach (var childBlock in Blocks)
+            State = BlockState.Small;
+            foreach (var childBlock in Blocks.Values)
             {
-                childBlock.OnInit(this);
+                childBlock.OnInitSmall(this);
             }
-            Type type = this.GetType();
+            Type type = GetType();
             Console.WriteLine(type.FullName + ": OnInit");
         }
 
-        public void OnEvent(string evn, string data)
+        public virtual void OnInitMain(Block block)
         {
-            Type type = this.GetType();
-            Console.WriteLine(type.FullName + ": OnEvent");
-            MethodInfo mi = type.GetMethod(evn);
-            Console.WriteLine(mi.IsPublic);
-            mi.Invoke(this, new object[] {data});
+            Parent = block;
+            State = BlockState.Main;
+            foreach (var childBlock in Blocks.Values)
+            {
+                childBlock.OnInitSmall(this);
+            }
+            Type type = GetType();
+            Console.WriteLine(type.FullName + ": OnInit");
+        }
+
+        public virtual void OnInitMainMini(Block block)
+        {
+            Parent = block;
+            State = BlockState.Mini;
+            foreach (var childBlock in Blocks.Values)
+            {
+                childBlock.OnInitSmall(this);
+            }
+            Type type = GetType();
+            Console.WriteLine(type.FullName + ": OnInit");
+        }
+
+
+
+        public void OnEvent(string obj, string evn, JObject data)
+        {
+            if(obj == Name)
+            {
+                Type type = GetType();
+                Console.WriteLine(type.FullName + ": OnEvent");
+                MethodInfo mi = type.GetMethod(evn);
+                if (mi != null)
+                {
+                    mi.Invoke(this, new object[] {data});
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.WriteLine(evn);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+            }
+
+            int pos = obj.IndexOf('/');
+            if (pos > 0)
+            {
+                string subobj = obj.Substring(obj.IndexOf('/')+1);
+                Blocks[subobj].OnEvent(subobj, evn, data);
+            }
+        }
+
+
+        public virtual void SendToClient(string obj, string evn, JObject data)
+        {
+            if (obj != "")
+            {
+                obj = "/" + obj;
+            }
+            obj = Name + obj;
+            Parent.SendToClient(obj, evn,data);
+        }
+
+        protected void SendToClient(string evn, JObject data)
+        {
+            SendToClient("", evn, data);
         }
 
         public JObject GetMap()
         {
-            JArray list = new JArray();
-            foreach (Block childBlock in Blocks)
+            var list = new JArray();
+            foreach (Block childBlock in Blocks.Values)
             {
                 list.Add(childBlock.GetMap());
             }
-            Type type = this.GetType();
- 
-            JObject jObject = new JObject();
-            JToken jToken = list;
-            jObject.Add(type.FullName, list); 
+            Type type = GetType();
+
+            var jObject = new JObject();
+            jObject.Add("name", Name);
+            jObject.Add("class", type.FullName);
+            jObject.Add("state",State.ToString());
+            jObject.Add("child", list);
+            
             return jObject;
         }
 
 
-
+        public enum BlockState
+        {
+            Main,
+            Small,
+            Mini
+        }
     }
 }

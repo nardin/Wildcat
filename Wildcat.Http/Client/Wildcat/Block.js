@@ -1,5 +1,4 @@
 (function() {
-  var __hasProp = {}.hasOwnProperty;
 
   namespace("Wildcat");
 
@@ -7,45 +6,44 @@
 
     Block.name = 'Block';
 
-    function Block(id, container) {
+    function Block(id, container, parent) {
       this.id = id;
       this.container = container;
+      this.parent = parent;
+      if (typeof this.parent !== 'undefined') {
+        this.fullId = this.parent.fullId + "/" + id;
+      } else {
+        this.fullId = id;
+      }
+      core.layout.blocks[this.fullId] = this;
     }
 
-    Block.prototype.init = function() {
-      return this._init();
+    Block.prototype.OnInit = function(data) {
+      return this._onInit(data);
     };
 
-    Block.prototype._init = function() {
-      var key, key_id, value, _ref, _results;
-      _ref = this._in;
-      _results = [];
-      for (key in _ref) {
-        if (!__hasProp.call(_ref, key)) continue;
-        value = _ref[key];
-        console.log(key);
-        key_id = this.id + '_' + key;
-        this.container.append('<div id="' + key_id + '"></div>');
-        this._in[key] = new this._in[key](key_id, this.container.find("#" + key_id));
-        _results.push(this._in[key].init());
+    Block.prototype._onInit = function(data) {
+      var child, i, _class, _i, _name, _ref;
+      this.block = {};
+      child = data.child;
+      this.container.html('<div id="' + data.name + '"></div>');
+      this.container = this.container.find("#" + data.name);
+      if (child.length > 0) {
+        for (i = _i = 0, _ref = child.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+          _class = child[i]["class"];
+          _name = child[i].name;
+          this.block[_name] = eval('new ' + _class + '(_name, this.container, this)');
+          this.block[_name].id = _name;
+          this.block[_name].OnInit(child[i]);
+          true;
+
+        }
       }
-      return _results;
+      return this.load();
     };
 
     Block.prototype.load = function() {
-      return this._load();
-    };
-
-    Block.prototype._load = function() {
-      var key, value, _ref, _results;
-      _ref = this._in;
-      _results = [];
-      for (key in _ref) {
-        if (!__hasProp.call(_ref, key)) continue;
-        value = _ref[key];
-        _results.push(this._in[key].load());
-      }
-      return _results;
+      return core.net.Send(this.fullId, "OnLoadData", {});
     };
 
     Block.prototype.render = function() {
@@ -54,15 +52,7 @@
     };
 
     Block.prototype._render = function() {
-      var key, value, _ref, _results;
-      _ref = this._in;
-      _results = [];
-      for (key in _ref) {
-        if (!__hasProp.call(_ref, key)) continue;
-        value = _ref[key];
-        _results.push(this._in[key].render());
-      }
-      return _results;
+      return this.view.render();
     };
 
     return Block;

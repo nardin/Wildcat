@@ -1,30 +1,46 @@
 ﻿using System;
+using Music.Repository;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Music.Block
 {
     class Artist : Wildcat.DB.System.Block
     {
-        protected string name;
+        public Entity.Artist Model;
+   
+
         #region События
 
-        public override void OnInit(Wildcat.DB.System.Block block)
+
+        public override void OnInitMain(Wildcat.DB.System.Block block)
         {
-            base.OnInit(block);
+            if(Params.ContainsKey("id"))
+            {
+                Repository.ArtistRepository repository = new ArtistRepository();
+                Model = repository.GetByUrl(Params["id"]);
+            }
+
+
             Albums albums = new Albums();
-            albums.OnInit(this);
-            Blocks.Add(albums);
+            albums.Parent = this;
+            albums.Name = "albums";
+            Blocks.Add(albums.Name, albums);
+            base.OnInitMain(block);
         }
 
-        public void OnSetName(string data)
+        public virtual void OnLoadData(JObject data)
         {
-            name = data;
+
+            if (Model != null)
+            {
+                var jObj = JObject.FromObject(Model);
+                Console.WriteLine(jObj.ToString());
+                SendToClient("OnLoadData", jObj);
+            }
+
         }
 
-        public void OnPrintName(string data)
-        {
-            Console.WriteLine("---------"+name);
-        }
         #endregion
     }
 }

@@ -10,10 +10,7 @@ class Wildcat.Core
     #Загрузка модулей
     @load: (classname) ->
         self = @
-        requirejs.config({baseUrl: 'Client',});
-        classnamed = classname.replace(".","/")
-        `requirejs([classnamed], function(){self.onLoad(classname)})`
-        console.info("load class: "+classname);
+        
 
     #Вызываем событие onLoad у загруженного модуля
     @onLoad: (classname) ->
@@ -25,9 +22,25 @@ class Wildcat.Core
 
 
     init: () ->
+        console.time("Core.init");
+        @log = new Wildcat.Log()
         @net = new Wildcat.Net()
         @layout = new Wildcat.Layout();
         @layout.init();
+        console.timeEnd("Core.init");
+
+    onEvent: (evt) ->
+        data = JSON.parse(evt) 
+        console.groupCollapsed("Событие: "+data.event + " для " + data.object)
+        console.log data.data 
+        console.groupEnd()
+        if (data.object == "Layout")
+            @layout[data.event](data.data)
+        else
+            @layout.blocks[data.object][data.event](data.data)
+        
+
+
 
 
         

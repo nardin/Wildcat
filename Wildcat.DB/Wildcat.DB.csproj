@@ -16,7 +16,7 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Block\List.cs" />
     <Compile Include="Entity\Event.cs" />
     <Compile Include="Repository\EventRepository.cs" />
     <Compile Include="Database.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="System\ICollection.cs" />
     <Compile Include="System\IEntity.cs" />
     <Compile Include="System\IRepository.cs" />
+    <Compile Include="System\Logger.cs" />
     <Compile Include="System\MongoDB.cs" />
     <Compile Include="System\MongoRepository.cs" />
   </ItemGroup>
@@ -78,7 +80,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Block\" />
     <Folder Include="Collection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

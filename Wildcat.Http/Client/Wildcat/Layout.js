@@ -3,26 +3,41 @@
   namespace("Wildcat");
 
   Wildcat.Layout = (function() {
-    var id;
 
     Layout.name = 'Layout';
 
     function Layout() {}
 
-    id = "Layout";
+    Layout.prototype.id = "Layout";
 
-    Layout.mainBlock = void 0;
+    Layout.prototype.mainBlock = void 0;
 
-    Layout.prototype.onLoad = function() {
-      console.info(this.name + " : onLoad");
-      return this.init();
+    Layout.prototype.blocks = {};
+
+    Layout.prototype.view = void 0;
+
+    Layout.prototype.OnInit = function(data) {
+      var _class, _name;
+      console.timeEnd("Layout.Router");
+      _class = data["class"];
+      _name = data.name;
+      this.mainBlock = eval('new ' + _class + '(_name, this.container)');
+      this.mainBlock.OnInit(data);
+      console.info(_name + " : onInit");
+      return this.mainBlock.render();
     };
 
     Layout.prototype.init = function() {
       console.info("Layout : init");
-      this.container = $("body");
-      this.container.html('<div id="layout"></div>');
-      this.container = this.container.find("#layout");
+      this.container = document.getElementById("layout");
+      if (this.container === null) {
+        this.container = $("body");
+        this.container.html('<div id="layout"></div>');
+        this.container = this.container.find("#layout");
+      } else {
+        this.container = $(this.container);
+      }
+      console.time("Layout.Router");
       return this.route();
     };
 
@@ -30,13 +45,23 @@
       return console.log("OnEvent");
     };
 
+    Layout.prototype.OnRender = function(data) {
+      if (typeof data.name === 'undefined') {
+        data.name = "Layout";
+      }
+      this.view = new Music.View.Layout(void 0, void 0, this);
+      return this.view.render();
+    };
+
     Layout.prototype.route = function() {
-      return this.serverEvent("", "OnLoad", location.pathname);
+      return this.serverEvent("", "OnLoad", {
+        url: location.pathname
+      });
     };
 
     Layout.prototype.serverEvent = function(obj, evn, data) {
       var objpath;
-      objpath = id;
+      objpath = this.id;
       if (obj !== "") {
         objpath += "/" + obj;
       }

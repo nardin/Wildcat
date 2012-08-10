@@ -36,32 +36,27 @@ namespace Wildcat.Http.Core
             JObject jObject = JObject.Parse(message);
             string obj = jObject.Property("object").Value.ToString();
             string evn = jObject.Property("event").Value.ToString();
-            JProperty data = jObject.Property("data");
-
+            var data = (JObject)jObject.Property("data").Value;
             _layout.OnEvent(obj,evn,data);
-
-
-            /*if (obj == "client")
-            {
-                switch (evn)
-                {
-                    case "load":
-                        Type type = Sys.blockType[data];
-                        _block = type.GetConstructor(Type.EmptyTypes).Invoke(null);
-                        _block.OnLoad();
-                        break;
-                }
-            }
-            if (obj == "block")
-            {
-                _block.OnEvent(evn, data);
-            }*/
-
-            //_socket.Send(message);
         }
         public void Send(string obj, string evn, string data)
         {
-            _socket.Send(data);
+            JObject jObject = new JObject();
+            jObject.Add("object",obj);
+            jObject.Add("event",evn);
+            jObject.Add("data",data);
+
+            _socket.Send(jObject.ToString());
+        }
+
+        public void Send(string obj, string evn, JObject data)
+        {
+            JObject jObject = new JObject();
+            jObject.Add("object", obj);
+            jObject.Add("event", evn);
+            jObject.Add("data", data);
+
+            _socket.Send(jObject.ToString());
         }
 
 

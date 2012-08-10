@@ -8,14 +8,14 @@ namespace Wildcat.Http.Core
     {
         private Client _client;
 
-        private dynamic _block;
+        private Wildcat.DB.System.Block _block;
 
         public Layout(Client client)
         {
             _client = client;
         }
 
-        public void OnEvent(string obj, string evn, JProperty data)
+        public void OnEvent(string obj, string evn, JObject data)
         {
             if(obj == "Layout")
             {
@@ -32,24 +32,27 @@ namespace Wildcat.Http.Core
                 int pos = obj.IndexOf('/');
                 if (pos > 0)
                 {
-                    string subobj = obj.Substring(obj.IndexOf('/'));
+                    string subobj = obj;
                     _block.OnEvent(subobj, evn, data);
                 }
+                else
+                {
+                    _block.OnEvent(obj, evn, data);
+                }
+                
             }
         }
 
-        public void OnLoad(JProperty data)
+        public void OnLoad(JObject data)
         {
-            string blockName = Route(data.Value.ToString());
+            Route(data.ToString());
 
-            Type type = Sys.blockType[blockName];
-            _block = type.GetConstructor(Type.EmptyTypes).Invoke(null);
-            _block.OnInit(this);
+            _block.OnInitMain(this);
             _block.OnLoad(data);
-            _client.Send("Layout","OnLoad",_block.GetMap().ToString());
+            _client.Send("Layout","OnInit",_block.GetMap());
         }
 
-        protected string Route(string path)
+        protected void Route(string path)
         {
             Console.WriteLine("Route:"+path);
             string[] part = path.Split('/');
@@ -57,7 +60,23 @@ namespace Wildcat.Http.Core
             string block = part[2];
             string id = part[3];
 
-            return module + ".Block." + block;
+            string blockName = module + ".Block." + block;
+            Type type = Sys.blockType[blockName];
+            _block = (Wildcat.DB.System.Block) type.GetConstructor(Type.EmptyTypes).Invoke(null);
+            _block.Parent = this;
+            _block.Name = "main";
+            _block.Params.Add("id", id);
+
+            var obj = new JObject();
+            obj.Add("module",module);
+
+            SendToClient("Layout","OnRender",obj);
+
+        }
+
+        public override void SendToClient(string obj, string evn, JObject data)
+        {
+            _client.Send(obj,evn,data);
         }
     }
 }

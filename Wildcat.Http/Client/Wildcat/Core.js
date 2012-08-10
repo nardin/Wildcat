@@ -16,15 +16,8 @@
     log = "log";
 
     Core.load = function(classname) {
-      var classnamed, self;
-      self = this;
-      requirejs.config({
-        baseUrl: 'Client'
-      });
-      classnamed = classname.replace(".", "/");
-      requirejs([classnamed], function(){self.onLoad(classname)});
-
-      return console.info("load class: " + classname);
+      var self;
+      return self = this;
     };
 
     Core.onLoad = function(classname) {
@@ -38,9 +31,25 @@
     };
 
     Core.prototype.init = function() {
+      console.time("Core.init");
+      this.log = new Wildcat.Log();
       this.net = new Wildcat.Net();
       this.layout = new Wildcat.Layout();
-      return this.layout.init();
+      this.layout.init();
+      return console.timeEnd("Core.init");
+    };
+
+    Core.prototype.onEvent = function(evt) {
+      var data;
+      data = JSON.parse(evt);
+      console.groupCollapsed("Событие: " + data.event + " для " + data.object);
+      console.log(data.data);
+      console.groupEnd();
+      if (data.object === "Layout") {
+        return this.layout[data.event](data.data);
+      } else {
+        return this.layout.blocks[data.object][data.event](data.data);
+      }
     };
 
     return Core;

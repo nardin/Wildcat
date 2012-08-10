@@ -2,7 +2,7 @@
 
 namespace Music.Collection
 {
-    class Artist : Wildcat.DB.System.Collection<Entity.Artist>
+    public class Artist : Wildcat.DB.System.Collection<Entity.Artist>
     {
 
     }

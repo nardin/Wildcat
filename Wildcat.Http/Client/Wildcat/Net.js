@@ -1,18 +1,17 @@
 (function() {
 
   Wildcat.Net = (function() {
-    var isConnected, messageList;
+    var messageList;
 
     Net.name = 'Net';
-
-    isConnected = false;
 
     messageList = [];
 
     function Net() {
-      this.s = this;
+      this.self = this;
       console.info("Net : init");
       window.core.net = this;
+      console.time("Layout.OnLoad");
       this.wsImpl = window.WebSocket || window.MozWebSocket;
       this.ws = new this.wsImpl('ws://46.61.183.13:8181/Wildcat', 'my-protocol');
       this.ws.onopen = this.onOpen;
@@ -21,9 +20,11 @@
     }
 
     Net.prototype.onOpen = function(evt) {
+      console.timeEnd("Layout.OnLoad");
+      core.net.isConnected = true;
       console.log("Connection open ...");
-      if (messageList.length > 0) {
-        return this.send(messageList[0]);
+      if (typeof core.net.messageList !== 'undefined' && core.net.messageList.length > 0) {
+        return core.net.ws.send(core.net.messageList[0]);
       }
     };
 
@@ -32,22 +33,27 @@
     };
 
     Net.prototype.onMessage = function(evt) {
-      return console.log("Received Message: " + evt.data);
+      return core.onEvent(evt.data);
     };
 
     Net.prototype.Send = function(obj, ev, data) {
       if (this.isConnected) {
-        return this.ws.send(JSON.stringify({
+        this.ws.send(JSON.stringify({
           object: obj,
           event: ev,
           data: data
         }));
+        return console.log("push");
       } else {
-        return messageList.push(JSON.stringify({
+        if (typeof core.net.messageList === 'undefined') {
+          core.net.messageList = [];
+        }
+        core.net.messageList.push(JSON.stringify({
           object: obj,
           event: ev,
           data: data
         }));
+        return console.log("send");
       }
     };
 

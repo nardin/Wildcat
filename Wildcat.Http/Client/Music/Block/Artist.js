@@ -16,15 +16,15 @@
       return Artist.__super__.constructor.apply(this, arguments);
     }
 
-    Artist.prototype.init = function() {
-      this._in = {};
-      return this._init();
+    Artist.prototype.OnLoadData = function(data) {
+      this.model = new Music.Model.Artist();
+      this.model.OnLoad(data);
+      return this.render();
     };
 
     Artist.prototype.render = function() {
-      this.container.text("Это артист");
-      this._render();
-      return console.log("Home block artist");
+      this.view = new Music.View.Artist(this.container, this.model, this);
+      return this._render();
     };
 
     return Artist;

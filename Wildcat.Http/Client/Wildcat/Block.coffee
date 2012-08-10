@@ -3,28 +3,34 @@ namespace "Wildcat"
 # Базовый класс всех блоков
 class Wildcat.Block
 
-    constructor:(@id,@container) ->        
+    constructor:(@id,@container,@parent) ->
+        if (typeof @parent != 'undefined')
+            @fullId = @parent.fullId + "/" + id;        
+        else
+            @fullId = id;
+        core.layout.blocks[@fullId] = @
 
-    init:->
-        @_init()
+    OnInit: (data)->
+
+        @_onInit(data)
         #console.log("blokc init")
-    _init: ->
-        for own key, value of @_in
-            console.log key
-
-            key_id = @id+'_'+key
-            @container.append('<div id="'+key_id+'"></div>')
-
-            @_in[key] = new @_in[key](key_id, @container.find("#"+key_id))
-            @_in[key].init()
+    _onInit:(data) ->
+        @block = {}
+        child = data.child
+        @container.html('<div id="'+data.name+'"></div>')
+        @container = @container.find("#"+data.name)
+        if child.length > 0
+            for i in [0.. child.length-1]
+                _class = child[i].class 
+                _name = child[i].name        
+                @block[_name] = eval('new '+_class+'(_name, this.container, this)')
+                @block[_name].id = _name;
+                @block[_name].OnInit(child[i])
+                true 
+        @load()
 
     load:->
-        @_load()
-        #console.log("blokc load")
-        
-    _load: ->
-        for own key, value of @_in
-            @_in[key].load()
+        core.net.Send(@fullId,"OnLoadData",{});
 
     render:->
         #console.log("block render")
@@ -32,6 +38,5 @@ class Wildcat.Block
         @_render()
         
     _render: ->
-        for own key, value of @_in
-            @_in[key].render()
+        @view.render();
         

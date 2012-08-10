@@ -13,6 +13,7 @@ namespace Wildcat.Http
         // Запуск сервера
         public HttpServer(int Port)
         {
+            Core.Logger.Log.Info("Старт сервера статики");
             Listener = new TcpListener(IPAddress.Any, Port); // Создаем "слушателя" для указанного порта
             Listener.Start(); // Запускаем его
 

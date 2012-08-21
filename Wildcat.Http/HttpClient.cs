@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Configuration;
 using com.google.javascript.jscomp;
+using dotless.Core;
 
 namespace Wildcat.Http
 {
@@ -23,7 +24,6 @@ namespace Wildcat.Http
                 ScanDir(subDir,selector,ref fileList);    
             }
         }
-
 
         // Отправка страницы с ошибкой
         private void SendError(TcpClient Client, int Code)
@@ -100,7 +100,7 @@ namespace Wildcat.Http
 
 
             // Если строка запроса оканчивается на "/", то добавим к ней index.html
-            if (RequestUri.EndsWith(".wcjs"))
+            if (RequestUri.EndsWith(".js"))
             {
                 basePath += "Client/";
                 string dirPath = basePath + RequestUri.Split('.')[0];
@@ -109,7 +109,6 @@ namespace Wildcat.Http
                     SendError(Client, 404);
                     return;
                 }
-                MemoryStream memoryStream = new MemoryStream();
                 DirectoryInfo dir = new DirectoryInfo(dirPath);
                 ContentType = "text/javascript";
                 // Посылаем заголовки
@@ -151,6 +150,51 @@ namespace Wildcat.Http
                     }
                 }
 
+            }
+            else if (RequestUri.EndsWith(".css"))
+            {
+                basePath += "Client/";
+                string dirPath = basePath + RequestUri.Split('.')[0];
+                if (!Directory.Exists(dirPath))
+                {
+                    SendError(Client, 404);
+                    return;
+                }
+                DirectoryInfo dir = new DirectoryInfo(dirPath + "/Style");
+                ContentType = "text/stylesheet";
+                // Посылаем заголовки
+                string Headers = "HTTP/1.1 200 OK\nContent-Type: " + ContentType + "\n\n";
+                byte[] HeadersBuffer = Encoding.ASCII.GetBytes(Headers);
+                Client.GetStream().Write(HeadersBuffer, 0, HeadersBuffer.Length);
+
+                string totaljs = "";
+                List<string> fileList = new List<string>();
+                ScanDir(dir, "*.css", ref fileList);
+                ScanDir(dir, "*.less", ref fileList);
+
+                foreach (var file in fileList)
+                {
+                    if (file.EndsWith(".less"))
+                    {
+                        string fileText = "";
+                        fileText = File.ReadAllText(file);
+                        fileText = Less.Parse(fileText);
+                        byte[] b1 = Encoding.UTF8.GetBytes (fileText);
+                        Client.GetStream().Write(b1, 0, b1.Length);
+                    }
+                    else
+                    {
+                        FileStream FS = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read);
+                        while (FS.Position < FS.Length)
+                        {
+                            // Читаем данные из файла
+                            Count = FS.Read(Buffer, 0, Buffer.Length);
+                            // И передаем их клиенту
+                            Client.GetStream().Write(Buffer, 0, Count);
+                        }
+                        FS.Close();
+                    }
+                }
             }
             else
             {              

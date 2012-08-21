@@ -17,14 +17,16 @@ class Wildcat.Block
     _onInit:(data) ->
         @block = {}
         child = data.child
-        @container.html('<div id="'+data.name+'"></div>')
+        @container.append('<div id="'+data.name+'"></div>')
         @container = @container.find("#"+data.name)
         if child.length > 0
             for i in [0.. child.length-1]
                 _class = child[i].class 
-                _name = child[i].name        
+                _name = child[i].name
+
                 @block[_name] = eval('new '+_class+'(_name, this.container, this)')
                 @block[_name].id = _name;
+                @block[_name].state = child[i].state;
                 @block[_name].OnInit(child[i])
                 true 
         @load()
@@ -33,10 +35,13 @@ class Wildcat.Block
         core.net.Send(@fullId,"OnLoadData",{});
 
     render:->
-        #console.log("block render")
         @container.text("А я блок! А кто ты?")
         @_render()
         
     _render: ->
         @view.render();
+
+
+    IMain:()->
+        
         

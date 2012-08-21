@@ -1,21 +1,27 @@
 ﻿using System;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using Wildcat.DB.System;
 
 namespace Wildcat.Http.Core
 {
-    class Layout : DB.System.Block
+    class Layout : DB.System.Layout
     {
         private Client _client;
 
         private Wildcat.DB.System.Block _block;
+
+        private Dictionary<string, Wildcat.DB.System.Block> _backgroundBlock = new Dictionary<string, Block>();
+
+        private string currentModul = "";
 
         public Layout(Client client)
         {
             _client = client;
         }
 
-        public void OnEvent(string obj, string evn, JObject data)
+        public override void  OnEvent(string obj, string evn, JObject data)
         {
             if(obj == "Layout")
             {
@@ -43,7 +49,7 @@ namespace Wildcat.Http.Core
             }
         }
 
-        public void OnLoad(JObject data)
+        public override void OnLoad(JObject data)
         {
             Route(data.ToString());
 
@@ -52,7 +58,7 @@ namespace Wildcat.Http.Core
             _client.Send("Layout","OnInit",_block.GetMap());
         }
 
-        protected void Route(string path)
+        protected override void Route(string path)
         {
             Console.WriteLine("Route:"+path);
             string[] part = path.Split('/');
@@ -67,12 +73,22 @@ namespace Wildcat.Http.Core
             _block.Name = "main";
             _block.Params.Add("id", id);
 
-            var obj = new JObject();
-            obj.Add("module",module);
+            if (currentModul != module)
+            {
+                string setupName = module + ".Setup";
+                Type typeSetup = Sys.setupType[setupName];
+                var setup = (Wildcat.DB.System.Setup)typeSetup.GetConstructor(Type.EmptyTypes).Invoke(null);
+                setup.OnLoad(this);
 
-            SendToClient("Layout","OnRender",obj);
+                currentModul = module;
+                var obj = new JObject();
+                obj.Add("module", module);
 
+                SendToClient("Layout", "OnRender", obj);
+            }
         }
+
+        
 
         public override void SendToClient(string obj, string evn, JObject data)
         {

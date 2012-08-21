@@ -24,3 +24,17 @@
   <div>Постер: {$poster} </div>
   <div id="albums"></div>
 {/template}
+
+/**
+ * Says hello to the world.
+ * @param name The name of the person to say hello to.
+ */
+{template .small}
+    <a>
+        <div class="artist-crop" style="background: #FFFFFF url(/Content/artist/160x160/);"></div>
+        <div class="artist-info">
+            <div class="artist-name">{$name}</div>
+            <div class="artist-count">1 / 3</div>
+        </div>
+    </a>
+{/template}

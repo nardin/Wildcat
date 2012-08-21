@@ -33,11 +33,19 @@ namespace Wildcat.Http.Core
         public void OnMessage(string message)
         {
             Console.WriteLine(message);
-            JObject jObject = JObject.Parse(message);
-            string obj = jObject.Property("object").Value.ToString();
-            string evn = jObject.Property("event").Value.ToString();
-            var data = (JObject)jObject.Property("data").Value;
-            _layout.OnEvent(obj,evn,data);
+            try
+            {
+                JObject jObject = JObject.Parse(message);
+                string obj = jObject.Property("object").Value.ToString();
+                string evn = jObject.Property("event").Value.ToString();
+                var data = (JObject)jObject.Property("data").Value;
+                _layout.OnEvent(obj, evn, data);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
         }
         public void Send(string obj, string evn, string data)
         {

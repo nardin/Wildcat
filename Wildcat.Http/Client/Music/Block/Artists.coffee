@@ -1,6 +1,6 @@
-class Music.Block.Artists extends Wildcat.Block
+class Music.Block.Artists extends Wildcat.BlockList
 
                 
     render: ->
-        @view = new Music.View.Artist(@container, @model,@)
+        @view = new Wildcat.View(@container, @model,@)
         @_render()

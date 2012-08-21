@@ -7,9 +7,15 @@ class Wildcat.Layout
     #Текущий главный блок
     mainBlock : undefined
 
+    bgBlocks: {}
+
     blocks : {}
 
     view : undefined
+
+
+    OnAddBgBlock: (data)->
+        
 
     OnInit: (data) ->
         console.timeEnd("Layout.Router");
@@ -17,6 +23,8 @@ class Wildcat.Layout
         _name = data.name
 
         @mainBlock = eval('new '+_class+'(_name, this.container)')
+        @mainBlock.state = data.state
+        console.log(data.state)
         @mainBlock.OnInit(data)
         console.info(_name + " : onInit" )
         @mainBlock.render()
@@ -31,6 +39,8 @@ class Wildcat.Layout
         else
             @container = $(@container)
         console.time("Layout.Router");
+        self = @
+        window.addEventListener("popstate", -> self.route());
         @route()
 
     onEvent: (obj, evn, data)->
@@ -43,7 +53,10 @@ class Wildcat.Layout
 
     
     # Маршрутизация
-    route:->    
+    route:->
+        @mainBlock = undefined
+        @blocks = {}
+        @container.html("");
         @serverEvent("","OnLoad",{url:location.pathname})
         
 

@@ -16,6 +16,8 @@ namespace Wildcat.Http
             Core.Logger.Log.Info("Старт сервера статики");
             Listener = new TcpListener(IPAddress.Any, Port); // Создаем "слушателя" для указанного порта
             Listener.Start(); // Запускаем его
+            Listener.Server.ReceiveTimeout = 1000;
+            Listener.Server.SendTimeout = 1000;
 
             // В бесконечном цикле
             while (true)
@@ -38,7 +40,17 @@ namespace Wildcat.Http
         static void ClientThread(Object StateInfo)
         {
             // Просто создаем новый экземпляр класса Client и передаем ему приведенный к классу TcpClient объект StateInfo
-            new HttpClient((TcpClient)StateInfo);
+            try
+            {
+                new HttpClient((TcpClient)StateInfo);
+            }
+            catch (Exception e)
+            {
+                
+                Console.WriteLine(e.Message);
+            }
+
+            
         }
 
         // Остановка сервера
@@ -56,11 +68,11 @@ namespace Wildcat.Http
         {
             // Определим нужное максимальное количество потоков
             // Пусть будет по 4 на каждый процессор
-            int MaxThreadsCount = Environment.ProcessorCount * 4;
+            int MaxThreadsCount = Environment.ProcessorCount * 8;
             // Установим максимальное количество рабочих потоков
             ThreadPool.SetMaxThreads(MaxThreadsCount, MaxThreadsCount);
             // Установим минимальное количество рабочих потоков
-            ThreadPool.SetMinThreads(2, 2);
+            ThreadPool.SetMinThreads(4, 4);
             // Создадим новый сервер на порту 80
             new HttpServer(Convert.ToInt32(ConfigurationManager.AppSettings["port"]));
         }

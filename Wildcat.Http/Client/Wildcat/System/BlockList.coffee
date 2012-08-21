@@ -9,5 +9,6 @@ class Wildcat.BlockList extends Wildcat.Block
                 _name = child[i].name        
                 @block[_name] = eval('new '+_class+'(_name, this.container, this)')
                 @block[_name].id = _name;
+                @block[_name].state = child[i].state;
                 @block[_name].OnInit(child[i])
                 true 

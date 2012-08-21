@@ -6,7 +6,7 @@ namespace Music.Block
 {
     class Artists : Wildcat.DB.Block.List
     {
-        public Collection.Artist Model;
+        public new Collection.Artist Model;
 
         public override void OnInitMain(Wildcat.DB.System.Block block)
         {
@@ -27,8 +27,8 @@ namespace Music.Block
                 var block = new Artist();
                 block.OnInitSmall(this);
                 block.Model = artist;
-                block.Name = artist.Id;
-                Blocks.Add(artist.Id, block);
+                block.Name = artist.url;
+                Blocks.Add(artist.url, block);
             }
 
             var map = GetMap();

@@ -17,6 +17,9 @@
 
     View.prototype._render = function(subBlock) {
       var element, i, _results;
+      if (jQuery.isEmptyObject(this.block.block)) {
+        return false;
+      }
       _results = [];
       for (i in subBlock) {
         if (!__hasProp.call(subBlock, i)) continue;

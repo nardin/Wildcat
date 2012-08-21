@@ -13,12 +13,12 @@
     }
 
     Artists.prototype.render = function() {
-      this.view = new Music.View.Artist(this.container, this.model, this);
+      this.view = new Wildcat.View(this.container, this.model, this);
       return this._render();
     };
 
     return Artists;
 
-  })(Wildcat.Block);
+  })(Wildcat.BlockList);
 
 }).call(this);

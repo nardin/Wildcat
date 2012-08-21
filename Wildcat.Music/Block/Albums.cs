@@ -8,7 +8,7 @@ namespace Music.Block
 {
     public class Albums : Wildcat.DB.System.Block
     {
-        public Collection.Album Model;
+        public new Collection.Album Model;
 
         public override void OnInitSmall(Wildcat.DB.System.Block block)
         {

@@ -15,9 +15,25 @@
     }
 
     Artist.prototype.render = function() {
-      console.log(this.model);
-      this.container.html(Music.View.T.Artist.main(this.model));
+      var self;
+      console.info(this.block.state);
+      if (this.block.state === "Small") {
+        this.container.addClass("artist-block");
+        this.container.html(Music.View.T.Artist.small(this.model));
+        self = this;
+        this.container.click(function() {
+          return self.OnClick();
+        });
+      } else {
+        this.container.html(Music.View.T.Artist.main(this.model));
+      }
       return this._render(["albums"]);
+    };
+
+    Artist.prototype.OnClick = function() {
+      history.pushState(null, null, "/Music/Artist/" + this.model.url + "/");
+      core.layout.route();
+      return false;
     };
 
     return Artist;

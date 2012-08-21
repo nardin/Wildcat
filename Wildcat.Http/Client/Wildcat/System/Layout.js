@@ -12,9 +12,13 @@
 
     Layout.prototype.mainBlock = void 0;
 
+    Layout.prototype.bgBlocks = {};
+
     Layout.prototype.blocks = {};
 
     Layout.prototype.view = void 0;
+
+    Layout.prototype.OnAddBgBlock = function(data) {};
 
     Layout.prototype.OnInit = function(data) {
       var _class, _name;
@@ -22,12 +26,15 @@
       _class = data["class"];
       _name = data.name;
       this.mainBlock = eval('new ' + _class + '(_name, this.container)');
+      this.mainBlock.state = data.state;
+      console.log(data.state);
       this.mainBlock.OnInit(data);
       console.info(_name + " : onInit");
       return this.mainBlock.render();
     };
 
     Layout.prototype.init = function() {
+      var self;
       console.info("Layout : init");
       this.container = document.getElementById("layout");
       if (this.container === null) {
@@ -38,6 +45,10 @@
         this.container = $(this.container);
       }
       console.time("Layout.Router");
+      self = this;
+      window.addEventListener("popstate", function() {
+        return self.route();
+      });
       return this.route();
     };
 
@@ -54,6 +65,9 @@
     };
 
     Layout.prototype.route = function() {
+      this.mainBlock = void 0;
+      this.blocks = {};
+      this.container.html("");
       return this.serverEvent("", "OnLoad", {
         url: location.pathname
       });

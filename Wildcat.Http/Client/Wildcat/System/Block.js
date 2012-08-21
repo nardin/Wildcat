@@ -26,7 +26,7 @@
       var child, i, _class, _i, _name, _ref;
       this.block = {};
       child = data.child;
-      this.container.html('<div id="' + data.name + '"></div>');
+      this.container.append('<div id="' + data.name + '"></div>');
       this.container = this.container.find("#" + data.name);
       if (child.length > 0) {
         for (i = _i = 0, _ref = child.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
@@ -34,6 +34,7 @@
           _name = child[i].name;
           this.block[_name] = eval('new ' + _class + '(_name, this.container, this)');
           this.block[_name].id = _name;
+          this.block[_name].state = child[i].state;
           this.block[_name].OnInit(child[i]);
           true;
 
@@ -54,6 +55,8 @@
     Block.prototype._render = function() {
       return this.view.render();
     };
+
+    Block.prototype.IMain = function() {};
 
     return Block;
 

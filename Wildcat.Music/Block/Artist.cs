@@ -7,7 +7,7 @@ namespace Music.Block
 {
     class Artist : Wildcat.DB.System.Block
     {
-        public Entity.Artist Model;
+        public new Entity.Artist Model;
    
 
         #region События

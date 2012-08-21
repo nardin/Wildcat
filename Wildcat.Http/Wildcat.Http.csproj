@@ -11,7 +11,8 @@
     <RootNamespace>Wildcat.Http</RootNamespace>
     <AssemblyName>Wildcat.Http</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -36,6 +37,9 @@
   <ItemGroup>
     <Reference Include="compiler">
       <HintPath>..\lib\compiler.dll</HintPath>
+    </Reference>
+    <Reference Include="dotless.Core">
+      <HintPath>..\packages\dotless.1.3.0.5\lib\dotless.Core.dll</HintPath>
     </Reference>
     <Reference Include="Fleck">
       <HintPath>..\packages\Fleck.0.9.6.12\lib\net40\Fleck.dll</HintPath>
@@ -97,7 +101,19 @@
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
+    <None Include="Client\Music\Block\Player.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
     <None Include="Client\Music\Model\Artist.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
+    <None Include="Client\Music\Model\Player.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
@@ -121,68 +137,75 @@
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
+    <None Include="Client\Music\View\Player.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
     <None Include="Client\Music\View\T\Albums.soy" />
     <None Include="Client\Music\View\T\Artist.soy" />
     <None Include="Client\Music\View\T\Layout.soy" />
+    <None Include="Client\Music\View\T\Player.soy" />
     <None Include="Client\Photo\Block.Event.coffee" />
     <None Include="Client\Photo\Block.Events.coffee" />
     <None Include="Client\Photo\Block.Home.coffee" />
     <None Include="Client\Photo\View.Event.soy" />
-    <None Include="Client\Wildcat.coffee">
+    <None Include="Client\Wildcat\_.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
-    <None Include="Client\Wildcat\Block.coffee">
+    <None Include="Client\Wildcat\System\Block.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
-    <None Include="Client\Wildcat\BlockList.coffee">
+    <None Include="Client\Wildcat\System\BlockList.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
-    <None Include="Client\Wildcat\Core.coffee">
+    <None Include="Client\Wildcat\System\Core.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
-    <None Include="Client\Wildcat\Layout.coffee">
+    <None Include="Client\Wildcat\System\Layout.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
-    <None Include="Client\Wildcat\Log.coffee">
+    <None Include="Client\Wildcat\System\Log.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
-    <None Include="Client\Wildcat\Model.coffee">
+    <None Include="Client\Wildcat\System\Model.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
-    <None Include="Client\Wildcat\Net.coffee">
+    <None Include="Client\Wildcat\System\Net.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
-    <None Include="Client\Wildcat\View.coffee">
+    <None Include="Client\Wildcat\System\View.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
       <Iced>False</Iced>
     </None>
-    <None Include="Client\Wildcat\ViewList.coffee">
+    <None Include="Client\Wildcat\System\ViewList.coffee">
       <Compile>True</Compile>
       <Minify>True</Minify>
       <Bare>False</Bare>
@@ -194,13 +217,19 @@
     <Content Include="Client\Music\Block\Artists.js">
       <DependentUpon>Artists.coffee</DependentUpon>
     </Content>
+    <Content Include="Client\Music\Block\Player.js">
+      <DependentUpon>Player.coffee</DependentUpon>
+    </Content>
+    <Content Include="Client\Music\Model\Player.js">
+      <DependentUpon>Player.coffee</DependentUpon>
+    </Content>
     <Content Include="Client\Music\View\Albums.js">
       <DependentUpon>Albums.coffee</DependentUpon>
     </Content>
     <Content Include="Client\Music\View\Layout.js">
       <DependentUpon>Layout.coffee</DependentUpon>
     </Content>
-    <Content Include="Client\Wildcat\BlockList.js">
+    <Content Include="Client\Wildcat\System\BlockList.js">
       <DependentUpon>BlockList.coffee</DependentUpon>
     </Content>
     <Content Include="Client\Wildcat\Lib\jquery-1.7.2.js" />
@@ -225,33 +254,33 @@
     <Content Include="Client\Photo\Block.Home.js">
       <DependentUpon>Block.Home.coffee</DependentUpon>
     </Content>
-    <Content Include="Client\Wildcat.js">
-      <DependentUpon>Wildcat.coffee</DependentUpon>
-    </Content>
-    <Content Include="Client\Wildcat\Block.js">
+    <Content Include="Client\Wildcat\System\Block.js">
       <DependentUpon>Block.coffee</DependentUpon>
     </Content>
-    <Content Include="Client\Wildcat\Core.js">
+    <Content Include="Client\Wildcat\System\Core.js">
       <DependentUpon>Core.coffee</DependentUpon>
     </Content>
-    <Content Include="Client\Wildcat\Layout.js">
+    <Content Include="Client\Wildcat\System\Layout.js">
       <DependentUpon>Layout.coffee</DependentUpon>
     </Content>
     <Content Include="Client\Wildcat\Lib\soyutils.js" />
-    <Content Include="Client\Wildcat\Log.js">
+    <Content Include="Client\Wildcat\System\Log.js">
       <DependentUpon>Log.coffee</DependentUpon>
     </Content>
-    <Content Include="Client\Wildcat\Model.js">
+    <Content Include="Client\Wildcat\System\Model.js">
       <DependentUpon>Model.coffee</DependentUpon>
     </Content>
-    <Content Include="Client\Wildcat\Net.js">
+    <Content Include="Client\Wildcat\System\Net.js">
       <DependentUpon>Net.coffee</DependentUpon>
     </Content>
-    <Content Include="Client\Wildcat\View.js">
+    <Content Include="Client\Wildcat\System\View.js">
       <DependentUpon>View.coffee</DependentUpon>
     </Content>
-    <Content Include="Client\Wildcat\ViewList.js">
+    <Content Include="Client\Wildcat\System\ViewList.js">
       <DependentUpon>ViewList.coffee</DependentUpon>
+    </Content>
+    <Content Include="Client\Wildcat\_.js">
+      <DependentUpon>_.coffee</DependentUpon>
     </Content>
     <Content Include="index.html" />
   </ItemGroup>

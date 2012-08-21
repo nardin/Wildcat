@@ -71,9 +71,11 @@
     <Compile Include="System\ICollection.cs" />
     <Compile Include="System\IEntity.cs" />
     <Compile Include="System\IRepository.cs" />
+    <Compile Include="System\Layout.cs" />
     <Compile Include="System\Logger.cs" />
     <Compile Include="System\MongoDB.cs" />
     <Compile Include="System\MongoRepository.cs" />
+    <Compile Include="System\Setup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

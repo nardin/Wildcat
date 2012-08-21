@@ -20,7 +20,6 @@ class Wildcat.Core
             console.log("er");
             obj.onLoad()
 
-
     init: () ->
         console.time("Core.init");
         @log = new Wildcat.Log()
@@ -28,6 +27,8 @@ class Wildcat.Core
         @layout = new Wildcat.Layout();
         @layout.init();
         console.timeEnd("Core.init");
+
+
 
     onEvent: (evt) ->
         data = JSON.parse(evt) 

@@ -8,10 +8,12 @@ namespace Wildcat.Http.Core
     static class Sys
     {
         public static Dictionary<string, Type> blockType;
+        public static Dictionary<string, Type> setupType;
 
         static public void LoadModule()
         {
             blockType = new Dictionary<string, Type>();
+            setupType = new Dictionary<string, Type>();
 
             Assembly assembly = Assembly.LoadFrom("Music.dll");
             SysConsole.Modules.Add(assembly.FullName);
@@ -21,13 +23,21 @@ namespace Wildcat.Http.Core
             foreach (Type type in types)
             {
                 string[] name = type.Namespace.Split(delimiter);
-                switch (name[1])
+                if (name.Length == 1)
                 {
-                    case "Block":
-                        string blockName = type.FullName;
-                        blockType[blockName] =  type;
-                        SysConsole.Blocks.Add(blockName);
-                        break;
+                    string setupName = type.FullName;
+                    setupType[setupName] = type;
+                }
+                else
+                {
+                    switch (name[1])
+                    {
+                        case "Block":
+                            string blockName = type.FullName;
+                            blockType[blockName] = type;
+                            SysConsole.Blocks.Add(blockName);
+                            break;
+                    }
                 }
             }
         }

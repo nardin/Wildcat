@@ -1,0 +1,42 @@
+﻿// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+{namespace Music.View.T.Player}
+
+/**
+ * Says hello to the world.
+ */
+{template .main}
+    <div id="jp_container_1" class="jp-audio player">
+        <p>Sonata Arctica</p>
+    
+        <span class="currentsing-title">Stones Grow Her Name (Limited Edition): Cinderblox</span>
+    
+        <div class="jp-type-playlist">
+            <div class="jp-gui jp-interface" style="">
+                <span class="jp-controls">
+                    <span><a href="javascript:;" class="jp-play" tabindex="1" style="display: none; "></a></span>
+                    <span><a href="javascript:;" class="jp-pause" tabindex="1" style="display: block; "></a></span>
+                </span>
+
+                <div class="jp-progress">
+                    <span class="jp-current-time time">00:00</span>
+                    <span class="jp-duration time" style="float: right;">04:03</span>
+                    <div class="jp-seek-bar" style="width: 100%; ">
+                        <div class="jp-play-bar" style="width: 0%; "></div>
+                    </div>
+    
+                </div>
+                <!--
+                <ul class="jp-toggles">
+                <li><a href="javascript:;" class="jp-shuffle" tabindex="1" title="shuffle">shuffle</a></li>
+                <li><a href="javascript:;" class="jp-shuffle-off" tabindex="1" title="shuffle off">shuffle off</a></li>
+                <li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>
+                <li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off">repeat off</a></li>
+                </ul>-->
+            </div>
+        </div>
+    </div>
+{/template}

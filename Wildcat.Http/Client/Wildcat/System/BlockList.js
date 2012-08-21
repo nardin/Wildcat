@@ -24,6 +24,7 @@
           _name = child[i].name;
           this.block[_name] = eval('new ' + _class + '(_name, this.container, this)');
           this.block[_name].id = _name;
+          this.block[_name].state = child[i].state;
           this.block[_name].OnInit(child[i]);
           _results.push(true);
         }
